@@ -1,0 +1,30 @@
+import cv2
+import numpy as np
+import crop
+import time
+
+
+def showimage(name,image):
+    cv2.imshow(name,image)
+    cv2.waitKey(0)
+    cv2.destroyAllWindows()
+
+
+
+def tophatdiffblackhat(image): 
+    kernel=np.ones((5,5),np.uint8)
+    tophat=cv2.morphologyEx(image, cv2.MORPH_TOPHAT, kernel)
+    blackhat = cv2.morphologyEx(image, cv2.MORPH_BLACKHAT, kernel)
+    finalimage=tophat-blackhat
+    pos1=np.where(finalimage<[110,110,110])
+    pos2=np.where(finalimage>[130,130,130])
+    finalimage[pos1]=0
+    finalimage[pos2]=0
+    cv2.imwrite("image104newoutput.jpg",finalimage)
+
+
+if __name__=="__main__":
+    st=time.time()
+    image=cv2.imread("image104.jpg")
+    tophatdiffblackhat(image)
+    
